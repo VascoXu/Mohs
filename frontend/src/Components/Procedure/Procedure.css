@@ -1,0 +1,24 @@
+.procedure-list 
+{
+    font-size: 0.85rem;
+}
+
+.procedure
+{
+    height: 3.5rem;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, .125);
+}
+
+.inner-shadow
+{
+    box-shadow: 0 1px rgba(255, 255, 255, 0.5) inset !important;
+}
+
+.list-group-hover .list-group-item:not(.active):hover 
+{
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+    cursor: pointer;
+}
