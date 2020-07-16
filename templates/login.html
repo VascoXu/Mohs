@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Smash
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/scripts/login.js"></script>
+{% endblock scripts %}
+
+{% block body %}
+<div class="login text-center">
+  <div class="form-signin">
+    <img class="mb-4 smash_logo" src="/static/imgs/SmashLab.png" alt="Smash Lab" />
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+    <!-- Experimenter Input Group -->
+    <div class="input-group mb-2">
+      <input type="text" name="enum" id="inputEnum" class="form-control" placeholder="Experimenter number" autocomplete="off" required autoFocus />
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <input class="mr-1" type="checkbox" value="econsent" id="econsent" /> consent
+        </div>
+      </div>
+    </div>
+
+    <!-- Participant Input Group -->
+    <div class="input-group mb-3">
+      <input type="text" name="pnum" id="inputPnum" class="form-control" placeholder="Participant Number" autocomplete="off" required />
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <input class="mr-1" type="checkbox" value="pconsent" id="pconsent" /> consent
+        </div>
+      </div>
+    </div>
+
+    <button id="eready" class="btn btn-lg btn-primary btn-block">Experimenter Ready</button>
+    <button id="pready" class="btn btn-lg btn-info btn-block" type="submit"><a id="pready-text" href="{{ url_for('home') }}">Participant Ready</a></button>
+
+  </div>
+</div>
+{% endblock %}
