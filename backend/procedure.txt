@@ -1,0 +1,216 @@
+P:  Wash hands with soap and water.
+
+Q:  Is Purell/hand sanitizer okay?
+A:	Yes, hand sanitizer is sufficient.
+
+Q:	Should I use a specific type of soap?
+A:	Any soap will work.
+
+Q:	I don’t have soap. What should I do?
+A:	Hand sanitizer can be used.
+
+Q:	Do I need to dry my hands?
+A:	Yes. Please use a clean towel.
+
+Q:	What do I dry my hands with?
+A:	Please use a clean towel.
+
+Q:	How long should I wash my hands for?
+A:	Wash your hands for thirty seconds.
+
+----------------------------------------
+
+P:	Set the bag of supplies on a clean surface outside the bathroom. 
+
+Q:	Where?
+A:	Any room outside of the bathroom.
+
+Q:	Which supplies do I need?
+A:	All of the supplies in the provided bag.
+
+Q:	Should I clean the surface off first?
+A:	Yes, the surface needs to be clean. 
+
+Q:	Does it have to be a clean surface?
+A:	Yes, the surface needs to be clean. 
+
+Q:	Which day of supplies?
+A:	Please use the supplies in the provided bag.
+
+----------------------------------------
+
+P:	Place a fresh clean towel and trash bag in the bathroom.  
+
+Q:	Where? 
+A:	Near the shower where you will be removing your dressing.
+
+Q:	Does it have to be a clean towel? 
+A:	Yes, laundered between uses.
+
+Q:	Can I use the trashcan in my bathroom?
+A:	Yes. 
+
+Q:	Why do I need a trash bag?
+A:	You will place the old dressing in the trash bag. 
+
+Q:	Why do I need a towel?
+A:	You will need a towel to dry your wound and body after showering.
+
+----------------------------------------
+
+P:	Shower, remove bandage, gently wash with soap and water.
+
+Q:	Do I take the bandage off before I get in the shower or after? 
+A:	Take the bandage off in the shower. It is more comfortable to remove a wet dressing.
+
+Q:	How should I wash it?
+A:	Wash the wound gently with soap and water.
+
+Q:	What do I wash it with? 
+A:	Please use your clean hands to wash the wound. Do not use a towel or shower loofah.
+
+Q:	How long should I wash it for?
+A:	Wash the wound for thirty seconds.
+
+Q:	Where do I put the bandage?
+A:	Place the bandage in the trash bag.
+
+Q:	The bandage is sticking to the wound. What should I do?
+A:	Let the bandage soak for longer in the shower.
+
+Q:	Can I use shampoo to wash it?
+A:	Tear free baby shampoo is acceptable.
+
+Q:	Can I use a washcloth/shower loofah to wash it?
+A:	Please use your clean hands to wash the wound. Do not use a towel or shower loofah.
+
+Q:	Should I use hydrogen peroxide?
+A:	Please avoid using hydrogen peroxide. 
+
+Q:	 Why can I not use hydrogen peroxide?
+A:	It is too harsh for a fresh wound. 
+
+Q:	How do I know if I’ve cleaned it well enough?
+A:	Loose debris and ointment should be washed away.
+
+Q:	I don’t have soap. What should I do?
+A:	Please find soap. A tear free baby shampoo is also acceptable. 
+
+----------------------------------------
+
+P:  Dry wound and body then go to set up.
+
+1)	What do I dry the wound with?
+i.	Dry the wound with a fresh clean towel.
+
+2)	Do I dry my body first or the wound first?
+i.	Dry the wound first and then your body.
+
+----------------------------------------
+
+P:	Pat your wound dry with gauze.
+
+Q:	Can I use my towel to dry it?
+A:	Yes, if the towel is fresh and clean.
+
+Q:	Can I use a Kleenex/tissue to dry it?
+A:	Yes.
+
+Q:	Can I let it air out/air dry?
+A:	No, it is best to cover the wound quickly.
+
+Q:	Do I need to use new gauze or can I use my old gauze?
+A:	Always use fresh gauze.
+
+Q:	How dry does it need to be? 
+A:	Remove visible drops of water.
+
+----------------------------------------
+
+P:	Cut non-stick dressing then open Vaseline.
+
+Q:	What size do I cut the dressing?
+A:	Cut the dressing to a size that will cover the wound.
+
+Q:	Can I use Aquaphor?
+A:	No, please use the supplied petrolatum. The supplied petrolatum is the best covering for your wound. Other creams and ointments may irritate your skin.
+
+Q:	Can I use Neosporin/antibiotic ointment?
+A:	No, please use the supplied petrolatum. The supplied petrolatum is the best covering for your wound. Other creams and ointments may irritate your skin.
+
+Q:	Can I use lotion/moisturizer?
+A:	No, please use the supplied petrolatum. The supplied petrolatum is the best covering for your wound. Other creams and ointments may irritate your skin.
+
+Q:	Can I let the wound air out before using the Vaseline?
+A:	No, it is best to cover the wound quickly.
+
+----------------------------------------
+
+P:	Using 2 Q tips, spread a thick layer of Vaseline over your wound. 
+
+Q:	Can I use my finger?
+A:	No. Please use the supplied Q tips.
+
+Q:	How thick of a layer? 
+A:	Spread a quarter inch layer. 
+
+Q:	How should I spread the Vaseline?
+A:	Spread a quarter inch layer like you are icing a cake.
+
+Q:	Can I skip this step and just cover it with the bandage?
+A:	No. Vaseline is an important part of protecting your skin. 
+
+Q:	Can I do a thin layer instead?
+A:	No, spread a quarter inch layer. 
+
+----------------------------------------
+
+P:	Cover with non-stick dressing and tape on.
+
+Q:	How do I tape it on?
+A:	Apply multiple strips until the dressing is secure. 
+
+Q:	Do I have to keep it covered? 
+A:	Yes, until it heals and looks like normal skin. 
+
+Q:	I can’t get the bandage to stay in place. What do I do?
+A:	Apply multiple strips until the dressing is secure. 
+
+Q:	I can’t get the tape to stick. What do I do?
+A:	Cut longer strips and apply widely. 
+
+Q:	Are gauze and non-stick dressing the same thing? 
+A:	The non-stick dressing is always applied second, after the Vaseline. Additional gauze can absorb extra fluids as a third layer, if needed. 
+
+Q:	Can I leave the bandage off for a few hours after cleaning it?
+A:	No, it is important to keep it covered to facilitate healing.
+
+Q:	How much gauze should I use?
+A:	The wound should be covered completely. If the previous dressing was soaked, then the new dressing should have extra gauze added.  
+
+Q:	Can I use a Band-Aid?
+A:	A Band-Aid can be used for smaller wounds. 
+
+Q:	Can I use liquid bandage?
+A:	No.
+
+Q:	Can I use an ACE wrap?
+A:	Yes, compression can help with healing. 
+
+Q:	Can I let it air out/breathe?
+A:	No, it is important to keep it covered to facilitate healing.
+
+Q:	Can I remove the bandage if I want to ___ (go swimming, go running, play golf, play tennis, etc.)?
+A:	The bandage should not be removed for any activity in the first week of wound care. 
+
+Q:	Do I use the same gauze that I used to dry the wound?
+A:	No, please use new gauze.
+
+Q:	Do I have to use tape?
+A:	Yes, you need to use tape.
+
+----------------------------------------
+
+P:	See you tomorrow
+
+----------------------------------------

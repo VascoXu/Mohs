@@ -10,21 +10,9 @@ class Questions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questions: [],
+      step: 0,
       edit: false
     };
-  }
-
-  componentDidMount() {
-    const questions = [
-      "Can I use Purell/hand sanitizer?", 
-      "How long do I wash my hands for?",
-      "How long do I keep the band-aid for?",
-      "Unanswerable"
-    ];
-    this.setState({
-      questions: questions
-    });
   }
 
   handleChange = (index, event) => {
@@ -38,12 +26,15 @@ class Questions extends Component {
   }
 
   handleClick = (index, event) => {
-    // Play sound of question
-    // playSound(this.state.questions[index]);
+    var question = this.props.procedure[this.props.step].questions[index][0];
+    var answer = this.props.procedure[this.props.step].questions[index][1];
+
+    // Play sound of answer
+    playSound(answer);
 
     // Insert data to database (i.e. log data)
     var timeElapsed = getCurrentTime();
-    var data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: `Question ${index}: ${this.state.questions[index]}`};
+    var data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: `Question ${index}: ${question}`};
     logData(data);
   }
 
@@ -59,13 +50,14 @@ class Questions extends Component {
     })
     .then(response => response.blob())
     .then(blob => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = `${localStorage.getItem('currentPnum')}.zip`;
-        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-        a.click();    
-        a.remove();  //afterwards we remove the element again         
+      // Download Zip file
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = `${localStorage.getItem('currentPnum')}.zip`;
+      document.body.appendChild(a); 
+      a.click();    
+      a.remove();  
     });
   }
 
@@ -76,20 +68,26 @@ class Questions extends Component {
   }
 
   render() {
+
+    // Wait for procedure to load
+    var procedure = [];
+    if (this.props.procedure.length > 0) {
+      procedure = this.props.procedure[this.props.step].questions.slice(0, 4);
+    }
+
     return (
       <div className="container full-height mt-2">
         <h2 className="text-center">Questions</h2>
         <hr/>
+
+        {/* Questions */}
         <div className="list-group">
-          {this.state.questions.map((question, i) =>
-            {return (this.state.edit
-              ? <input key={i} onChange={this.handleChange.bind(this, i)} type="text" className="form-control question mt-2" value={this.state.questions[i]} autoFocus={!i} />
-              : <button key={i} onClick={this.handleClick.bind(this, i)} type="button" className="btn btn-light btn-block question">Q{i}: {question}</button>
-            )}
-            // <button key={i} type="button" className="list-group-item list-group-item-action question mt-2">Q{i}: {question}</button>
+          {procedure.map((step, i) =>
+            <button key={i} onClick={this.handleClick.bind(this, i)} type="button" className="btn btn-light btn-block question">Q{i + 1}: {step[0]}</button>
           )}
         </div>
-        {/* <Question key={i} data_index={i+1} question={question}></Question> */}
+        
+        {/* Reminder Button */}
         <div className="container text-center mt-5">
               <button type="button" onClick={this.recordTime} className="btn shadow ml-3 btn-dark btn-lg light-border">
                 <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-bell-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -101,7 +99,7 @@ class Questions extends Component {
         
         {/* Zip Folder */}
         <div className="export mr-3 mb-3">
-          <button onClick={this.export} className="btn btn-primary"><i className="fa fa-download" aria-hidden="true"></i><span className="ml-2">Export Data</span></button>
+          <button onClick={this.export} className="btn btn-dark"><i className="fa fa-download" aria-hidden="true"></i><span className="ml-2">Finished</span></button>
         </div>
       </div>
     );

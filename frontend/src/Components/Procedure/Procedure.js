@@ -10,35 +10,14 @@ class Procedure extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      procedure: [],
-      step: 0,
-      edit: false
+      started: false,
+      edit: false,
     };
-  }
-
-  componentDidMount() {
-    // Fetch procedure after mount
-    // this.getProcedure();
-    var procedure = [
-      "Wash hands w/ soap", 
-      "Put day x supplies on clean surface outside bathroom",
-      "Fresh clean towel & trash bag in bathroom",
-      "Shower, remove, gently wash",
-      "Dry body and wound then go to set up",
-      "Pat dry w/wound gauze or qtip",
-      "Cut non-stick dressing then open vaseline",
-      "Using 2 qtips thickly “ice” wound with vaseline",
-      "Cover with gauze and tape on",
-      "See you tomorrow"
-    ];
-    this.setState({
-      procedure: procedure
-    });
   }
 
   inputChange = (index, event) => {
     // Update procedure
-    let items = [...this.state.procedure];
+    let items = [...this.props.procedure];
     items[index] = event.target.value;
 
     this.setState({
@@ -47,10 +26,11 @@ class Procedure extends Component {
   }
 
   procedureClick = (index, event) => {
-    this.setState({
-      step: index
-    });
-    // playSound(this.state.procedure[index]);
+    // Update step
+    this.props.updateStep(index);
+    
+    // Play sound
+    playSound(this.props.procedure[index].procedure);
   }
 
   setEditMode = () => {
@@ -59,41 +39,40 @@ class Procedure extends Component {
     })
   }
 
-  getProcedure = () => {
-    // Get a list of procedures
-    fetch('/api/procedure')
-    .then(response => response.json())
-    .then(data => {
-      this.procedure = data;
-    })
-  }
 
   done = () => {
-    // Play sound of question
-    //playSound(this.state.procedure[this.state.step]);
+    // Play sound of procedure
+    var length = this.props.procedure.length;
+    if (this.state.started) {
+      playSound(this.props.procedure[(this.props.step + 1) % length].procedure);
+
+      // Determine filename
+      var filename = `${localStorage.getItem("currentPnum")}-${this.props.step}`;
+
+      // Insert data to database (i.e log data)
+      var timeElapsed = getCurrentTime();
+      var data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: `Procedure (Step ${this.props.step}): ${this.props.procedure[this.props.step].procedure}`};
+      logData(data);
+
+      // Update step
+      this.props.incrementStep();
+
+    }
+    else {
+      this.setState({
+        started: true
+      })
+      playSound(this.props.procedure[(this.props.step) % length].procedure)
+    }
 
     // Stop recording
-    var filename = `${localStorage.getItem("currentPnum")}-${this.state.step}`;
-    if (this.state.step !== 0) {
+    if (this.state.started) {
       stopAudioRecording(filename);
     }
-    startAudioRecording();
+    if (this.props.step < length) {
+      startAudioRecording();
+    }
 
-    // Update step
-    this.setState({
-      step: (this.state.step + 1),
-    });
-
-    // Insert data to database (i.e log data)
-    var timeElapsed = getCurrentTime();
-    var data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: `Procedure (Step ${this.state.step}): ${this.state.procedure[this.state.step]}`};
-    logData(data);
-  }
-
-  back = () => {
-    this.setState({
-      step: (this.state.step - 1)
-    });
   }
   
   render() {
@@ -106,31 +85,32 @@ class Procedure extends Component {
             <div className="col-md-6">
               <div className="card mt-2">
                 <div className="card-body text-center">
-                  <h5 className="card-title">Step {this.state.step}:</h5>
+                  {this.state.started
+                    ? <h5 className="card-title">Step {this.props.step}:</h5>
+                    : <h5 className="card-title">Introduction:</h5>
+                  }
                   <hr/>
-                  <p id="step" className="card-text"> {this.state.procedure[this.state.step]} </p>
+                  {this.props.procedure.length > 0 && this.state.started
+                    ? <p id="step" className="card-text"> {this.props.procedure[this.props.step].procedure} </p>
+                    : <p id="step" className="card-text"> Press DONE to begin procedure and recording.</p>
+                  }
                 </div>
               </div>
               <div className="text-center mt-4">
                 <button type="button" onClick={this.repeat} className="shadow btn btn-secondary btn-lg dark-border">Repeat</button>
-                <button type="button" onClick={this.done} className="shadow btn ml-4 btn-secondary btn-lg dark-border">Done</button>
-                <section className="sound-clips">
-                </section>
-              </div>
+                <button type="button" onClick={this.done} className="shadow btn ml-4 btn-secondary btn-lg dark-border">Done</button>                
+              </div>   
             </div>
             <div className="col-md-6">
               <ul className="list-group list-group-hover mt-2 mb-5 procedure-list">
-                {this.state.procedure.map((step, i) => 
-                  {return (this.state.edit
-                    ? <input key={i} onChange={this.inputChange.bind(this, i)} type="text" className="form-control procedure" value={step} autoFocus={!i} />
-                    : <li key={i} onClick={this.procedureClick.bind(this, i)} id={'l' + i} className={`list-group-item ${(this.state.step === i) ? 'active' : ''}`}>{step}</li>
-                  )}
+                {this.props.procedure.map((step, i) => 
+                  <li key={i} onClick={this.procedureClick.bind(this, i)} id={'l' + i} className={`list-group-item ${(this.props.step === i && this.state.started) ? 'active' : ''}`}>{step.procedure}</li>
                 )}
               </ul>            
             </div>
           </div>
         </div>
-        <Audio></Audio>
+        <Audio recording={this.state.started}></Audio>
       </div>
     );
   }

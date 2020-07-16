@@ -8,35 +8,38 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      db: null
-    };
-    this.startTime = Math.floor(Date.now() / 1000);
+      procedure: [], 
+      step: 0
+    }
+  }
+
+  getProcedure = () => {
+    // Get a list of procedures
+    fetch('/api/procedure')
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      this.setState({
+        procedure: data
+      });
+    })
+  }
+
+  updateStep = (step) => {
+    this.setState({
+      step: step
+    })
+  }
+
+  incrementStep = () => {
+    this.setState({
+      step: (this.state.step + 1) % this.state.procedure.length
+    });
   }
 
   componentDidMount() {
-    // Open IndexedDB database
-    var request = window.indexedDB.open("mohs", 3);
-  
-    request.onsuccess = (event) => {
-      this.setState({
-        db: event.target.result
-      });
-    }
-  
-    request.onerror = function(event) {
-      // Generic error handler for all errors targeted at this database's request
-      console.error("Database error: " + event.target.errorCode);
-    };
-  
-    request.onupgradeneeded = function(event) {
-      let db = event.target.result;
-      
-      // Create an objectStore to store log file
-      db.createObjectStore("log", { autoIncrement : true });
-
-      // Create an objectStore to store Experimenter Numbers
-      db.createObjectStore("enums", { autoIncrement : true });
-    };
+    // Get procedure
+    this.getProcedure();
   }
 
   render() {    
@@ -45,14 +48,24 @@ class Home extends Component {
         {/* Left pane (Procedure section) */}
         <div className="bg-dark split left">
           <div>
-            <Procedure db={this.state.db} pnum={this.props.pnum}></Procedure>
+            <Procedure incrementStep={this.incrementStep} 
+                        updateStep={this.updateStep} 
+                        step={this.state.step} 
+                        procedure={this.state.procedure} 
+                        pnum={this.props.pnum}>
+            </Procedure>
           </div>
         </div>
 
         {/* Right pane (Questions sections) */}
         <div className="bg-light split right">
           <div>
-            <Questions db={this.state.db} pnum={this.props.pnum}></Questions>
+            <Questions incrementStep={this.incrementStep} 
+                        updateStep={this.updateStep} 
+                        step={this.state.step} 
+                        procedure={this.state.procedure} 
+                        pnum={this.props.pnum}>
+            </Questions>
           </div>
         </div>
       </div>

@@ -25,6 +25,7 @@ export function databaseGetAll(db) {
 }
 
 export function playSound(sound) {
+  window.speechSynthesis.cancel();
   var msg = new SpeechSynthesisUtterance(sound);
   window.speechSynthesis.speak(msg);
 }

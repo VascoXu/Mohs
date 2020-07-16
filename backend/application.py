@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from flask import Flask, flash, jsonify, request, redirect, session, render_template, url_for, send_file
 from helpers import zipdir
@@ -35,13 +36,7 @@ Session(app)
 def index():
     """Show main page"""
     return redirect("/login")
-
-
-@app.route('/login')
-def login():
-    """Login Page"""
-    return render_template("login.html")
-
+    
 
 @app.route('/home')
 def home():
@@ -49,10 +44,42 @@ def home():
     return render_template("home.html")
 
 
-@app.route('/procedure')
+@app.route('/api/procedure')
 def procedure():
     """Return the procedure and list of questions"""
-    pass
+
+    procedure = []
+    with open('procedure.txt') as fp:
+        # Remove empty lines
+        lines = (line.rstrip() for line in fp)
+        lines = (line for line in lines if line)
+
+        for line in lines:
+            # Insert procedure
+            step = {}
+            step['procedure'] = line[2:].lstrip()
+
+            # Insert question and answers
+            questions = []
+            question = next(lines, None)
+
+            # Reached end
+            if not question:
+                break
+
+            # Iterate through questions
+            while not question.startswith('-'):    
+                answer = next(lines, None)
+                q = (question[2:].lstrip(), answer[2:].lstrip())
+
+                questions.append(q)
+                question = next(lines, None)
+                
+            step['questions'] = questions
+
+            procedure.append(step)    
+
+    return jsonify(procedure)
 
 
 @app.route('/api/pnum', methods=['POST'])
@@ -63,17 +90,18 @@ def pnum():
     data = request.get_json()
     pnum = data['pnum']
 
-    # Create new directory for Participant, if not exists
-    if not os.path.exists(f'Participants/{pnum}'):
-        os.mkdir(f'Participants/{pnum}')
-        os.mkdir(f'Participants/{pnum}/soundfiles')
-        os.mkdir(f'Participants/{pnum}/logfiles')
+    # Delete directory, if exists (start fresh)
+    if os.path.exists(f'Participants/{pnum}'):
+        shutil.rmtree(f'Participants/{pnum}')
+
+    os.mkdir(f'Participants/{pnum}')
+    os.mkdir(f'Participants/{pnum}/soundfiles')
+    os.mkdir(f'Participants/{pnum}/logfiles')
 
     # Create log file with headers
-    if not os.path.isfile(f'Participants/{pnum}/logfiles/{pnum}.csv'):
-        with open(f'Participants/{pnum}/logfiles/{pnum}.csv', 'a') as logfile:
-            csv_writer = csv.writer(logfile)
-            csv_writer.writerow(['Timestamp', 'Action'])
+    with open(f'Participants/{pnum}/logfiles/{pnum}.csv', 'w') as logfile:
+        csv_writer = csv.writer(logfile)
+        csv_writer.writerow(['Timestamp', 'Action'])
 
     return jsonify({'res': "Success!"})
 
@@ -101,8 +129,7 @@ def export():
     path = f'Participants/{pnum}.zip'
 
     # Zip folder
-    if not os.path.isfile(path):
-        zipdir(f'Participants/{pnum}/', path)
+    zipdir(f'Participants/{pnum}/', path)
 
     return send_file(path, mimetype='application/zip', attachment_filename=filename, as_attachment=True)
 
@@ -116,15 +143,6 @@ def logfile():
     pnum = data['pnum']
     timestamp = data['timestamp']
     action = data['action']
-
-    """
-    # Convert rows to CSV file
-    with open(f'Participants/{pnum}/logfiles/{pnum}.csv', 'w+') as logfile:
-        csv_writer = csv.writer(logfile)
-        csv_writer.writerow(data.keys())
-        csv_writer.writerows(data.values())
-        logfile.close()
-    """
 
     # Write log to file
     with open(f'Participants/{pnum}/logfiles/{pnum}.csv', 'a') as logfile:
