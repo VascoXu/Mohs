@@ -13,8 +13,7 @@ import zipfile
 
 
 # Configure application
-app = Flask(__name__)
-
+app = Flask(__name__, static_folder='./build', static_url_path='/')
 
 # Ensure responses aren't cached
 @app.after_request
@@ -35,8 +34,8 @@ Session(app)
 @app.route('/')
 def index():
     """Show main page"""
-    return redirect("/login")
-    
+    return app.send_static_file('index.html')
+
 
 @app.route('/home')
 def home():
@@ -150,3 +149,6 @@ def logfile():
         csv_writer.writerow([timestamp, action])
     
     return jsonify({'res': "Success!"})
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
