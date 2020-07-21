@@ -6,7 +6,7 @@ A:	Yes, hand sanitizer is sufficient.
 Q:	Should I use a specific type of soap?
 A:	Any soap will work.
 
-Q:	I don’t have soap. What should I do?
+Q:	I don't have soap. What should I do?
 A:	Hand sanitizer can be used.
 
 Q:	Do I need to dry my hands?
@@ -90,10 +90,10 @@ A:	Please avoid using hydrogen peroxide.
 Q:	 Why can I not use hydrogen peroxide?
 A:	It is too harsh for a fresh wound. 
 
-Q:	How do I know if I’ve cleaned it well enough?
+Q:	How do I know if I've cleaned it well enough?
 A:	Loose debris and ointment should be washed away.
 
-Q:	I don’t have soap. What should I do?
+Q:	I don't have soap. What should I do?
 A:	Please find soap. A tear free baby shampoo is also acceptable. 
 
 ----------------------------------------
@@ -165,7 +165,7 @@ A:	No, spread a quarter inch layer.
 
 ----------------------------------------
 
-P:	Cover with non-stick dressing and tape on.
+P:	Cover with non-stick dressing and tape it on.
 
 Q:	How do I tape it on?
 A:	Apply multiple strips until the dressing is secure. 
@@ -173,10 +173,10 @@ A:	Apply multiple strips until the dressing is secure.
 Q:	Do I have to keep it covered? 
 A:	Yes, until it heals and looks like normal skin. 
 
-Q:	I can’t get the bandage to stay in place. What do I do?
+Q:	I can't get the bandage to stay in place. What do I do?
 A:	Apply multiple strips until the dressing is secure. 
 
-Q:	I can’t get the tape to stick. What do I do?
+Q:	I can't get the tape to stick. What do I do?
 A:	Cut longer strips and apply widely. 
 
 Q:	Are gauze and non-stick dressing the same thing? 
