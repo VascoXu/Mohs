@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SmashLab from './SmashLab.png'
 import './Login.css';
 import history from '../../history';
+import { getCurrentTime, playSound, logData } from "../helpers";
 
 class Login extends Component {
 
@@ -10,6 +11,7 @@ class Login extends Component {
     this.state = {
       pnum: "",
       enum: "",
+      etime: "",
       eready: false,
       econsent: false,
       econsented: false,
@@ -64,7 +66,8 @@ class Login extends Component {
     }
       
     this.setState ({
-      eready: true
+      eready: true,
+      etime: getCurrentTime()
     });
   }
 
@@ -78,7 +81,9 @@ class Login extends Component {
     fetch('/api/pnum', {
       method: 'POST',
       body: JSON.stringify({
-        pnum: this.state.pnum
+        pnum: this.state.pnum,
+        etime: this.state.etime,
+        ptime: getCurrentTime()
       }),
       headers: {
         'Accept': 'application/json',

@@ -18,7 +18,6 @@ class Home extends Component {
     fetch('/api/procedure')
     .then(response => response.json())
     .then(data => {
-      console.log(data)
       this.setState({
         procedure: data
       });

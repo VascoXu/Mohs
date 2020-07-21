@@ -25,8 +25,18 @@ export function databaseGetAll(db) {
 }
 
 export function playSound(sound) {
+  // Hard-code phonetics
+  sound = sound.toLowerCase();
+  if (sound.includes("vaseline")) {
+    sound = sound.replace("vaseline", "vaselleen");
+  }
+  if (sound.includes("wound")) {
+    sound = sound.replace("wound", "woond");
+  }
+
   window.speechSynthesis.cancel();
   var msg = new SpeechSynthesisUtterance(sound);
+  msg.rate = 0.75;
   window.speechSynthesis.speak(msg);
 }
 

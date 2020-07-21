@@ -88,6 +88,8 @@ def pnum():
     # Get Participant Number from POST request
     data = request.get_json()
     pnum = data['pnum']
+    etime = data['etime']
+    ptime = data['ptime']
 
     # Delete directory, if exists (start fresh)
     if os.path.exists(f'Participants/{pnum}'):
@@ -101,6 +103,8 @@ def pnum():
     with open(f'Participants/{pnum}/logfiles/{pnum}.csv', 'w') as logfile:
         csv_writer = csv.writer(logfile)
         csv_writer.writerow(['Timestamp', 'Action'])
+        csv_writer.writerow([etime, 'Experimenter Ready'])
+        csv_writer.writerow([ptime, 'Participant Ready'])
 
     return jsonify({'res': "Success!"})
 
@@ -112,6 +116,7 @@ def audio():
     audio = request.files['audio']
     pnum = request.form['pnum']
     filename = request.form['filename']
+    
     audio.save(f'Participants/{pnum}/soundfiles/{filename}.wav')
 
     return jsonify({'res': "Success!"})
