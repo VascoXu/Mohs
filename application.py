@@ -119,11 +119,6 @@ def audio():
     pnum = request.form['pnum']
     filename = request.form['filename']
 
-    # If filename already exists
-    is_filenames = glob.glob(f'Participants/{pnum}/soundfiles/{filename}*.wav')
-    if len(is_filenames) > 0:
-        filename = f'{filename}-{len(is_filenames)}'
-    
     audio.save(f'Participants/{pnum}/soundfiles/{filename}.wav')
 
     return jsonify({'res': "Success!"})
