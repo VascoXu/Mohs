@@ -33,7 +33,7 @@ class Questions extends Component {
     playSound(answer);
 
     // Insert data to database (i.e. log data)
-    var action = `P${this.props.step}Q${index + 1}: ${question}`;
+    var action = `P${this.props.step + 1}Q${index + 1}: ${question}`;
     log(action, this.props.startTime);
   }
 
