@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SmashLab from './SmashLab.png'
 import './Login.css';
 import history from '../../history';
-import { getCurrentTime, playSound, logData } from "../helpers";
+import { getCurrentTime, getTodaysDate } from "../helpers";
 
 class Login extends Component {
 
@@ -77,10 +77,19 @@ class Login extends Component {
     // Store current Participant Number in LocalStorage
     localStorage.setItem("currentPnum", this.state.pnum);
 
+    // Store current Experimenter Number in LocalStorage
+    localStorage.setItem("currentEnum", this.state.enum);
+
+    // Deteremine filename
+    var date = getTodaysDate();
+    var time = getCurrentTime().replace(/:/g, '');;
+    var filename = `${date}_${time}_${this.state.enum}_${this.state.pnum}`;
+
     // Inform the server about the Participant Number
     fetch('/api/pnum', {
       method: 'POST',
       body: JSON.stringify({
+        filename: filename,
         pnum: this.state.pnum,
         etime: this.state.etime,
         ptime: getCurrentTime()

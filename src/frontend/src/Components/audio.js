@@ -24,18 +24,18 @@ export function startAudioRecording() {
 }
 
 function startRecording(stream) {
-    // Start recording
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start(10);
+  // Start recording
+  mediaRecorder = new MediaRecorder(stream);
+  mediaRecorder.start(10);
 
-    // Start visualizing audio
-    // visualize(stream);
+  // Start visualizing audio
+  // visualize(stream);
 
-    console.log("recorder started");
+  console.log("recorder started");
 
-    mediaRecorder.ondataavailable = function(e) {
-      chunks.push(e.data);
-    }
+  mediaRecorder.ondataavailable = function(e) {
+    chunks.push(e.data);
+  }
 }
 
 export function stopAudioRecording(filename) {

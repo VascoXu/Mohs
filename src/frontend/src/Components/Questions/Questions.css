@@ -20,4 +20,15 @@
     position: fixed; 
     bottom: 0px; 
     right: 0px; 
-} 
+}
+
+.none
+{
+    display: none;
+}
+
+.bottom-right {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+}

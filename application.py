@@ -1,4 +1,5 @@
 import os
+import glob
 import shutil
 
 from flask import Flask, flash, jsonify, request, redirect, session, render_template, url_for, send_file
@@ -87,6 +88,7 @@ def pnum():
 
     # Get Participant Number from POST request
     data = request.get_json()
+    filename = data['filename']
     pnum = data['pnum']
     etime = data['etime']
     ptime = data['ptime']
@@ -100,11 +102,11 @@ def pnum():
     os.mkdir(f'Participants/{pnum}/logfiles')
 
     # Create log file with headers
-    with open(f'Participants/{pnum}/logfiles/{pnum}.csv', 'w') as logfile:
+    with open(f'Participants/{pnum}/logfiles/{filename}.csv', 'w') as logfile:
         csv_writer = csv.writer(logfile)
-        csv_writer.writerow(['Timestamp', 'Action'])
-        csv_writer.writerow([etime, 'Experimenter Ready'])
-        csv_writer.writerow([ptime, 'Participant Ready'])
+        csv_writer.writerow(['Absolute Time', 'Relative Time', 'Action'])
+        csv_writer.writerow([etime, 'N/A', 'Experimenter Ready'])
+        csv_writer.writerow([ptime, 'N/A', 'Participant Ready'])
 
     return jsonify({'res': "Success!"})
 
@@ -116,6 +118,11 @@ def audio():
     audio = request.files['audio']
     pnum = request.form['pnum']
     filename = request.form['filename']
+
+    # If filename already exists
+    is_filenames = glob.glob(f'Participants/{pnum}/soundfiles/{filename}*.wav')
+    if len(is_filenames) > 0:
+        filename = f'{filename}-{len(is_filenames)}'
     
     audio.save(f'Participants/{pnum}/soundfiles/{filename}.wav')
 
@@ -145,13 +152,17 @@ def logfile():
     # Get log file data from POST request
     data = request.get_json()
     pnum = data['pnum']
-    timestamp = data['timestamp']
+    abs_timestamp = data['abs_timestamp']
+    rel_timestamp = data['rel_timestamp']
     action = data['action']
 
+    # Determine filename
+    filename = glob.glob(f'Participants/{pnum}/logfiles/*.csv')[0]
+
     # Write log to file
-    with open(f'Participants/{pnum}/logfiles/{pnum}.csv', 'a') as logfile:
+    with open(filename, 'a') as logfile:
         csv_writer = csv.writer(logfile)
-        csv_writer.writerow([timestamp, action])
+        csv_writer.writerow([abs_timestamp, rel_timestamp, action])
     
     return jsonify({'res': "Success!"})
 

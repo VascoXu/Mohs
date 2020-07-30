@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Questions from '../Questions/Questions'
-import Procedure from '../Procedure/Procedure'
+import Procedure from '../Procedure_V2/Procedure'
 import './Home.css';
 
 class Home extends Component {
@@ -8,8 +8,9 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      procedure: [], 
-      step: 0
+      procedure: [],
+      startTime: 0,
+      step: -1
     }
   }
 
@@ -24,10 +25,16 @@ class Home extends Component {
     })
   }
 
+  updateStartTime = (startTime) => {
+    this.setState({
+      startTime: startTime
+    });
+  }
+
   updateStep = (step) => {
     this.setState({
       step: step
-    })
+    });
   }
 
   incrementStep = () => {
@@ -48,8 +55,10 @@ class Home extends Component {
         <div className="bg-dark split left">
           <div>
             <Procedure incrementStep={this.incrementStep} 
-                        updateStep={this.updateStep} 
+                        updateStep={this.updateStep}
                         step={this.state.step} 
+                        updateStartTime={this.updateStartTime}
+                        startTime={this.state.startTime}
                         procedure={this.state.procedure} 
                         pnum={this.props.pnum}>
             </Procedure>
@@ -60,8 +69,10 @@ class Home extends Component {
         <div className="bg-light split right">
           <div>
             <Questions incrementStep={this.incrementStep} 
-                        updateStep={this.updateStep} 
+                        updateStep={this.updateStep}
                         step={this.state.step} 
+                        updateStartTime={this.updateStartTime}
+                        startTime={this.state.startTime}
                         procedure={this.state.procedure} 
                         pnum={this.props.pnum}>
             </Questions>

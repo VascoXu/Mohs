@@ -10,7 +10,7 @@ class Audio extends Component {
 
   render() {
     return (
-      <div className="fixed-bottom ml-3 mb-3">
+      <div className="bottom-right mr-3 mb-3">
         <div className="container-fluid">
           <div className="row">
             <div className="col-xs-6">
@@ -21,9 +21,9 @@ class Audio extends Component {
                 </svg>
               </button>
             </div>
-            <div className="col-xs-6 ml-3">
+            {/* <div className="col-xs-6 ml-3">
               <canvas className="visualizer"></canvas>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

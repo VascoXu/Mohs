@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Audio from "../Audio/Audio"
 import "../../App.css";
 import "./Procedure.css";
-import { getCurrentTime, playSound, logData } from "../helpers";
+import { getCurrentTime, getTodaysDate, playSound, logData, log } from "../helpers";
 import { startAudioRecording, stopAudioRecording } from "../audio";
 
 class Procedure extends Component {
@@ -27,6 +27,11 @@ class Procedure extends Component {
   }
 
   procedureClick = (index, event) => {
+    // Ensure procedure has started
+    if (!this.state.started) {
+      return;
+    }
+
     // Update step
     this.props.updateStep(index);
 
@@ -49,9 +54,9 @@ class Procedure extends Component {
     // Repeat sound
     playSound(this.props.procedure[this.props.step].procedure);
 
-    // Log reminder clicked
-    var timeElapsed = getCurrentTime();
-    var data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: "Procedure Repeated!"};
+    // Log repeat clicked
+    let timeElapsed = getCurrentTime();
+    let data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: `P${this.props.step + 1} repeated: ${this.props.procedure[this.props.step].procedure}`};
     logData(data);
   }
 
@@ -87,9 +92,8 @@ class Procedure extends Component {
         playSound(this.props.procedure[(this.props.step + 1) % length].procedure);
 
         // Insert data to database (i.e log data)
-        let timeElapsed = getCurrentTime();
-        let data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: `P${this.props.step + 1}: ${this.props.procedure[this.props.step].procedure}`};
-        logData(data);
+        let action = `P${this.props.step + 2}: ${this.props.procedure[this.props.step + 1].procedure}`;
+        log(action, this.props.startTime);
 
         // Update step
         this.props.incrementStep();
@@ -101,9 +105,8 @@ class Procedure extends Component {
         })
 
         // Log end to database
-        let timeElapsed = getCurrentTime();
-        let data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: "Procedure has ended!"};
-        logData(data);
+        let action = "Procedure has ended.";
+        log(action, this.props.startTime);
       }
     }
     else {
@@ -112,18 +115,33 @@ class Procedure extends Component {
       })
       
       // Log start to database
-      let timeElapsed = getCurrentTime();
-      let data = {pnum: localStorage.getItem("currentPnum"), timestamp: timeElapsed, action: "Procedure has started!"};
-      logData(data);
+      let action = "Procedure started.";
+      log(action, "start");
 
-      playSound(this.props.procedure[(this.props.step) % length].procedure);
+      // Update start time
+      let startTime = new Date();
+      this.props.updateStartTime(startTime);
+
+      // Insert data to database (i.e log data)
+      action = `P${this.props.step + 2}: ${this.props.procedure[this.props.step + 1].procedure}`;
+      log(action, "start");
+
+      // Update step
+      this.props.incrementStep();
+
+      playSound(this.props.procedure[(this.props.step + 1) % length].procedure);
     }
 
     // Stop recording
     if (this.state.started) {
       // Determine filename
-      var filename = `${localStorage.getItem("currentPnum")}-${this.props.step}`;
-      console.log(filename);
+      var date = getTodaysDate();
+      var time = getCurrentTime().replace(/:/g, '');;
+      var expnum = localStorage.getItem("currentEnum");
+      var pnum = localStorage.getItem("currentPnum");
+      var step = this.props.step;
+
+      var filename = `${date}_${time}_${expnum}_${pnum}-${step}`;
       stopAudioRecording(filename);
     }
     if (this.props.step + 1 < length) {
@@ -142,7 +160,7 @@ class Procedure extends Component {
       card_button = <button type="button" onClick={this.export} className="shadow btn ml-4 btn-secondary btn-lg dark-border"><i className="fa fa-download" aria-hidden="true"></i><span className="ml-2">Finished</span></button>;
     }
     else if (this.state.started) {
-      card_title = <h5 className="card-title">Step {this.props.step}:</h5>;
+      card_title = <h5 className="card-title">Step {this.props.step + 1}:</h5>;
       card_body = <p id="step" className="card-text"> {this.props.procedure[this.props.step].procedure} </p>;
       card_button = <button type="button" onClick={this.done} className="shadow btn ml-4 btn-secondary btn-lg dark-border">Done</button>;
     }
