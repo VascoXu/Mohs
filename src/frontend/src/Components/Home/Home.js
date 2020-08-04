@@ -60,7 +60,7 @@ class Home extends Component {
                         updateStartTime={this.updateStartTime}
                         startTime={this.state.startTime}
                         procedure={this.state.procedure} 
-                        pnum={this.props.pnum}>
+                        foldername={this.props.location.state.foldername}>
             </Procedure>
           </div>
         </div>
@@ -73,8 +73,8 @@ class Home extends Component {
                         step={this.state.step} 
                         updateStartTime={this.updateStartTime}
                         startTime={this.state.startTime}
-                        procedure={this.state.procedure} 
-                        pnum={this.props.pnum}>
+                        procedure={this.state.procedure}
+                        foldername={this.props.location.state.foldername}>
             </Questions>
           </div>
         </div>

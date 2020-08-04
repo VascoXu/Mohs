@@ -29,12 +29,12 @@ class Questions extends Component {
     var question = this.props.procedure[this.props.step].questions[index][0];
     var answer = this.props.procedure[this.props.step].questions[index][1];
 
-    // Play sound of answer
-    playSound(answer);
-
     // Insert data to database (i.e. log data)
     var action = `P${this.props.step + 1}Q${index + 1}: ${question}`;
-    log(action, this.props.startTime);
+    log(action, this.props.startTime, this.props.foldername);
+
+    // Play sound of answer
+    playSound(answer);
   }
 
   reminder = () => {
@@ -43,7 +43,7 @@ class Questions extends Component {
 
     // Log reminder clicked
     var action = "Reminder clicked.";
-    log(action, this.props.startTime);
+    log(action, this.props.startTime, this.props.foldername);
   }
 
   setEditMode = () => {

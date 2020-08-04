@@ -12,6 +12,7 @@ class Login extends Component {
       pnum: "",
       enum: "",
       etime: "",
+      filename: "",
       eready: false,
       econsent: false,
       econsented: false,
@@ -72,8 +73,6 @@ class Login extends Component {
   }
 
   participantReady = () => {
-    history.push('/Home', {pnum: this.state.pnum});
-
     // Store current Participant Number in LocalStorage
     localStorage.setItem("currentPnum", this.state.pnum);
 
@@ -82,14 +81,16 @@ class Login extends Component {
 
     // Deteremine filename
     var date = getTodaysDate();
-    var time = getCurrentTime().replace(/:/g, '');;
-    var filename = `${date}_${time}_${this.state.enum}_${this.state.pnum}`;
+    var time = getCurrentTime().replace(/:/g, '');
+    var foldername = `${date}_${time}_${this.state.enum}_${this.state.pnum}`;
+
+    history.push('/Home', {pnum: this.state.pnum, foldername: foldername});
 
     // Inform the server about the Participant Number
     fetch('/api/pnum', {
       method: 'POST',
       body: JSON.stringify({
-        filename: filename,
+        foldername: foldername,
         pnum: this.state.pnum,
         etime: this.state.etime,
         ptime: getCurrentTime()

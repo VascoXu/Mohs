@@ -1,3 +1,9 @@
+// Wait for voices to load
+var voices;
+window.speechSynthesis.onvoiceschanged = function() {
+  voices = window.speechSynthesis.getVoices();
+};
+
 export function insertToDatabase(db, table, data) {
   var transaction = db.transaction([table], "readwrite");
 
@@ -35,9 +41,19 @@ export function playSound(sound) {
   }
 
   window.speechSynthesis.cancel();
+
   var msg = new SpeechSynthesisUtterance(sound);
-  msg.rate = 0.75;
-  window.speechSynthesis.speak(msg);
+
+  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    msg.voice = voices[49]; // "Google US English"
+    msg.rate = 0.75;
+    window.speechSynthesis.speak(msg);
+  }
+}
+
+export function playBeep() {
+  var beep = new Audio("beep.mp3");
+  beep.play();
 }
 
 export function logData(log) {
@@ -56,12 +72,11 @@ export function logData(log) {
   });
 }
 
-export function log(action, startTime) {
+export function log(action, startTime, foldername) {
   // Log action to database
   var abs_timestamp = getCurrentTime();
   var rel_timestamp = (startTime === "start") ? "00:00:00" : getTimeElapsed(startTime);
-  var pnum = localStorage.getItem("currentPnum");
-  var data = {pnum: pnum, abs_timestamp: abs_timestamp, rel_timestamp: rel_timestamp, action: action};
+  var data = {foldername: foldername, abs_timestamp: abs_timestamp, rel_timestamp: rel_timestamp, action: action};
   logData(data);
 }
 

@@ -88,21 +88,21 @@ def pnum():
 
     # Get Participant Number from POST request
     data = request.get_json()
-    filename = data['filename']
+    foldername = data['foldername']
     pnum = data['pnum']
     etime = data['etime']
     ptime = data['ptime']
 
     # Delete directory, if exists (start fresh)
-    if os.path.exists(f'Participants/{pnum}'):
-        shutil.rmtree(f'Participants/{pnum}')
+    if os.path.exists(f'Participants/{foldername}'):
+        shutil.rmtree(f'Participants/{foldername}')
 
-    os.mkdir(f'Participants/{pnum}')
-    os.mkdir(f'Participants/{pnum}/soundfiles')
-    os.mkdir(f'Participants/{pnum}/logfiles')
+    os.mkdir(f'Participants/{foldername}')
+    os.mkdir(f'Participants/{foldername}/soundfiles')
+    os.mkdir(f'Participants/{foldername}/logfiles')
 
     # Create log file with headers
-    with open(f'Participants/{pnum}/logfiles/{filename}.csv', 'w') as logfile:
+    with open(f'Participants/{foldername}/logfiles/{foldername}.csv', 'w') as logfile:
         csv_writer = csv.writer(logfile)
         csv_writer.writerow(['Absolute Time', 'Relative Time', 'Action'])
         csv_writer.writerow([etime, 'N/A', 'Experimenter Ready'])
@@ -118,8 +118,9 @@ def audio():
     audio = request.files['audio']
     pnum = request.form['pnum']
     filename = request.form['filename']
+    foldername = request.form['foldername']
 
-    audio.save(f'Participants/{pnum}/soundfiles/{filename}.wav')
+    audio.save(f'Participants/{foldername}/soundfiles/{filename}.wav')
 
     return jsonify({'res': "Success!"})
 
@@ -130,14 +131,14 @@ def export():
 
     # Get pnum from POST request arguments
     data = request.get_json()
-    pnum = data['pnum']
-    filename = f'{pnum}.zip'
-    path = f'Participants/{pnum}.zip'
+    foldername = data['foldername']
+    zipname = f'{foldername}.zip'
+    path = f'Participants/{zipname}.zip'
 
     # Zip folder
-    zipdir(f'Participants/{pnum}/', path)
+    zipdir(f'Participants/{foldername}/', path)
 
-    return send_file(path, mimetype='application/zip', attachment_filename=filename, as_attachment=True)
+    return send_file(path, mimetype='application/zip', attachment_filename=zipname, as_attachment=True)
 
 
 @app.route('/api/log', methods=['POST'])
@@ -146,13 +147,13 @@ def logfile():
 
     # Get log file data from POST request
     data = request.get_json()
-    pnum = data['pnum']
+    foldername = data['foldername']
     abs_timestamp = data['abs_timestamp']
     rel_timestamp = data['rel_timestamp']
     action = data['action']
 
     # Determine filename
-    filename = glob.glob(f'Participants/{pnum}/logfiles/*.csv')[0]
+    filename = glob.glob(f'Participants/{foldername}/logfiles/*.csv')[0]
 
     # Write log to file
     with open(filename, 'a') as logfile:

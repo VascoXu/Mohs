@@ -38,22 +38,23 @@ function startRecording(stream) {
   }
 }
 
-export function stopAudioRecording(filename) {
+export function stopAudioRecording(filename, foldername) {
   // Stop recording
   mediaRecorder.stop();
   console.log(mediaRecorder.state);
   console.log("recorder stopped");
-  mediaRecorder.onstop = (e) => stopRecording(e, filename);
+  mediaRecorder.onstop = (e) => stopRecording(e, filename, foldername);
 }
 
-function stopRecording(e, filename) {
+function stopRecording(e, filename, foldername) {
   // Stop and save the recording
   console.log("recorder onstopped");
   const blob = new Blob(chunks, { 'type' : 'audio/wav; codecs=0' });
   
   // Package the data
   var fd = new FormData();
-  fd.append("filename", filename)
+  fd.append("filename", filename);
+  fd.append("foldername", foldername);
   fd.append("pnum", localStorage.getItem("currentPnum"));
   fd.append("audio", blob);
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Audio from "../Audio/Audio"
 import "../../App.css";
 import "./Procedure.css";
-import { getCurrentTime, getTodaysDate, playSound, logData, log } from "../helpers";
+import { getCurrentTime, getTodaysDate, playSound, logData, log, playBeep } from "../helpers";
 import { startAudioRecording, stopAudioRecording } from "../audio";
 
 class Procedure extends Component {
@@ -36,12 +36,12 @@ class Procedure extends Component {
     // Update step
     this.props.updateStep(index);
 
-    // Play sound
-    playSound(this.props.procedure[index].procedure);
-
     // Insert data to database (i.e log data)
     let action = `P${index + 1}: ${this.props.procedure[index].procedure}`;
-    log(action, this.props.startTime);
+    log(action, this.props.startTime, this.props.foldername);
+
+    // Play sound
+    playSound(this.props.procedure[index].procedure);
 
     // Stop recording
     if (this.state.started) {
@@ -52,7 +52,7 @@ class Procedure extends Component {
       var pnum = localStorage.getItem("currentPnum");
 
       var filename = `${date}_${time}_${expnum}_${pnum}-${this.state.index}`;
-      stopAudioRecording(filename);
+      stopAudioRecording(filename, this.props.foldername);
     }
 
     if (index < this.props.procedure.length - 1) {
@@ -76,7 +76,7 @@ class Procedure extends Component {
     fetch('/api/export', {
       method: 'POST',
       body: JSON.stringify({
-        pnum: localStorage.getItem('currentPnum')
+        foldername: this.props.foldername,
       }),
       headers: {
         'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ class Procedure extends Component {
       var url = window.URL.createObjectURL(blob);
       var a = document.createElement('a');
       a.href = url;
-      a.download = `${localStorage.getItem('currentPnum')}.zip`;
+      a.download = `${this.props.foldername}.zip`;
       document.body.appendChild(a); 
       a.click();    
       a.remove();  
@@ -105,26 +105,34 @@ class Procedure extends Component {
       started: true
     })
 
-    // Update step
-    this.props.updateStep(0);
-
-    // Play procedure step
-    playSound(this.props.procedure[0].procedure);
+    // Start recording
+    startAudioRecording();
 
     // Log start to database
     let action = "Procedure started.";
-    log(action, "start");
+    log(action, "start", this.props.foldername);
 
     // Update start time
     let startTime = new Date();
     this.props.updateStartTime(startTime);
 
-    // Insert data to database (i.e log data)
-    action = `P${this.props.step + 2}: ${this.props.procedure[this.props.step + 1].procedure}`;
-    log(action, "start");
+    // Update step
+    this.props.updateStep(0);
+    
+    // Play initial beep sound
+    playBeep();
 
-    // Start recording
-    startAudioRecording();
+    // Wait 2 seconds before playing procedure audio 
+    setTimeout( () => {
+      // Insert data to database (i.e log data)
+      action = `P${this.props.step + 1}: ${this.props.procedure[this.props.step].procedure}`;
+      log(action, this.props.startTime, this.props.foldername);
+
+      // Play procedure step
+      playSound(this.props.procedure[0].procedure);
+
+    }, 2000);
+
   }
   
   render() {
