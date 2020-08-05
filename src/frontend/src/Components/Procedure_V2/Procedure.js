@@ -13,6 +13,7 @@ class Procedure extends Component {
       started: false,
       ended: false,
       edit: false,
+      isRecording: false,
       index: 0
     };
   }
@@ -53,10 +54,22 @@ class Procedure extends Component {
 
       var filename = `${date}_${time}_${expnum}_${pnum}-${this.state.index}`;
       stopAudioRecording(filename, this.props.foldername);
+
+      this.setState({
+        isRecording: false
+      });
     }
 
-    if (index < this.props.procedure.length - 1) {
+    if (index < this.props.procedure.length) {
       startAudioRecording();
+      this.setState({
+        isRecording: true
+      });
+    }
+    else {
+      // Log end to database
+      let action = "Procedure ended.";
+      log(action, this.props.startTime, this.props.foldername);
     }
 
     // Increment index
@@ -72,32 +85,54 @@ class Procedure extends Component {
   }
 
   export = () => {
-    // Export data
-    fetch('/api/export', {
-      method: 'POST',
-      body: JSON.stringify({
-        foldername: this.props.foldername,
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
-    .then(response => response.blob())
-    .then(blob => {
-      // Download Zip file
-      var url = window.URL.createObjectURL(blob);
-      var a = document.createElement('a');
-      a.href = url;
-      a.download = `${this.props.foldername}.zip`;
-      document.body.appendChild(a); 
-      a.click();    
-      a.remove();  
-    });
+    if (this.state.isRecording) {
+      // Determine filename
+      var date = getTodaysDate();
+      var time = getCurrentTime().replace(/:/g, '');;
+      var expnum = localStorage.getItem("currentEnum");
+      var pnum = localStorage.getItem("currentPnum");
 
-    // User must restart to use the app again
-    this.setState({
-      started: false
-    });
+      var filename = `${date}_${time}_${expnum}_${pnum}-${this.state.index}`;
+      stopAudioRecording(filename, this.props.foldername);
+      
+      // Log end to database
+      let action = "Procedure ended.";
+      log(action, this.props.startTime, this.props.foldername);
+
+      this.setState({
+        isRecording: false
+      })
+    }
+
+    // Wait 1 second before export
+    setTimeout( () => {
+      // Export data
+      fetch('/api/export', {
+        method: 'POST',
+        body: JSON.stringify({
+          foldername: this.props.foldername,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(response => response.blob())
+      .then(blob => {
+        // Download Zip file
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = `${this.props.foldername}.zip`;
+        document.body.appendChild(a); 
+        a.click();    
+        a.remove();  
+      });
+
+      // User must restart to use the app again
+      this.setState({
+        started: false
+      });
+    }, 1000);
   }
 
   startProcedure = () => {
@@ -132,7 +167,6 @@ class Procedure extends Component {
       playSound(this.props.procedure[0].procedure);
 
     }, 2000);
-
   }
   
   render() {

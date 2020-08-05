@@ -37,6 +37,12 @@ class Questions extends Component {
     playSound(answer);
   }
 
+  handleUnanswerable = () => {
+    // Insert data to database (i.e. log data)
+    var action = `P${this.props.step + 1}Q: Unanswerable`;
+    log(action, this.props.startTime, this.props.foldername);
+  }
+
   reminder = () => {
     // Remind user to vocalize their actions
     playSound("Please remember to describe what you are doing as you perform each step.");
@@ -70,6 +76,7 @@ class Questions extends Component {
           {procedure.map((step, i) =>
             <button key={i} onClick={this.handleClick.bind(this, i)} type="button" className={`btn btn-light btn-block question ${(this.props.step < 0) ? 'none' : ''}`}>Q{i + 1}: {step[0]}</button>
           )}
+          <button onClick={this.handleUnanswerable} type="button" className={`btn btn-light btn-block question ${(this.props.step < 0) ? 'none' : ''}`}>Unanswerable</button>
         </div>
         
         {/* Reminder Button */}
