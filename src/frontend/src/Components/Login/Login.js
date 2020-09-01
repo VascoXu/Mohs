@@ -21,6 +21,17 @@ class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    // Get current version number
+    fetch('/api/version')
+    .then(response => response.json())
+    .then(data => {
+      this.setState({
+        version: data["version"]
+      });
+    })
+  }
+
   handleChange = (event) => {
     const userEnum = event.target.value;
     this.setState({
@@ -82,7 +93,7 @@ class Login extends Component {
     // Deteremine filename
     var date = getTodaysDate();
     var time = getCurrentTime().replace(/:/g, '');
-    var foldername = `${date}_${time}_${this.state.enum}_${this.state.pnum}`;
+    var foldername = `${time}_${this.state.enum}_${this.state.pnum}_${this.state.version}`;
 
     history.push('/Home', {pnum: this.state.pnum, foldername: foldername});
 
@@ -99,6 +110,16 @@ class Login extends Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
+    })
+    .then(response => response.json())
+    .then(result => {
+      // Print result
+      console.log(result);
+    });
+
+    // Update version number
+    fetch('/api/version', {
+      method: 'POST',
     })
     .then(response => response.json())
     .then(result => {

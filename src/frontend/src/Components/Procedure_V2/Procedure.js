@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Audio from "../Audio/Audio"
 import "../../App.css";
 import "./Procedure.css";
 import { getCurrentTime, getTodaysDate, playSound, logData, log, playBeep } from "../helpers";
@@ -14,8 +13,10 @@ class Procedure extends Component {
       ended: false,
       edit: false,
       isRecording: false,
-      index: 0
+      index: 0,
     };
+    this.qPos = [];
+    this.prevClicked = null;
   }
 
   inputChange = (index, event) => {
@@ -33,6 +34,11 @@ class Procedure extends Component {
     if (!this.state.started) {
       return;
     }
+
+    // Change background color
+    event.target.style.background = `#${this.props.colors[index]}`;
+    if (this.prevClicked) this.prevClicked.style.background = "white";
+    this.prevClicked = event.target;
 
     // Update step
     this.props.updateStep(index);
@@ -65,6 +71,8 @@ class Procedure extends Component {
       this.setState({
         isRecording: true
       });
+
+      this.scrollToQuestion(index);
     }
     else {
       // Log end to database
@@ -143,6 +151,14 @@ class Procedure extends Component {
     // Start recording
     startAudioRecording();
 
+    // Determine the index of questions
+    var index = 0;
+    this.qPos.push(1);
+    for (let i = 0; i < this.props.procedure.length; i++) {
+      index += this.props.procedure[i].questions.length;
+      this.qPos.push(index);
+    }
+  
     // Log start to database
     let action = "Procedure started.";
     log(action, "start", this.props.foldername);
@@ -153,6 +169,10 @@ class Procedure extends Component {
 
     // Update step
     this.props.updateStep(0);
+    
+    // Change background of first element
+    document.getElementById('l0').style.background = `#${this.props.colors[0]}`;
+    this.prevClicked = document.getElementById('l0');
     
     // Play initial beep sound
     playBeep();
@@ -168,6 +188,23 @@ class Procedure extends Component {
 
     }, 2000);
   }
+
+  changeBackground = (i, e) => {
+    e.target.style.background = `#${this.props.colors[i]}`;
+  }
+
+  resetBackground = (i, e) => {
+    if (e.target !== this.prevClicked) {
+      e.target.style.background = "white";
+    }
+  }
+
+  scrollToQuestion = (i) => {
+    var index = this.qPos[i];
+    if (index < this.props.qRefs.length) {
+      this.props.qRefs[index].scrollIntoView({ block: 'start',  behavior: 'smooth' });
+    }
+  }
   
   render() {
     return (
@@ -177,25 +214,28 @@ class Procedure extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col">
-              <ul className="list-group list-group-hover mt-2 mb-5 procedure-list">
-                <li onClick={this.startProcedure} id='start' className={`list-group-item`}>Click <b>here</b> to begin the procedure recording. </li>
+              <div className="list-group mt-2 mb-5 procedure-list">
+                <button onClick={this.startProcedure} id='start' className={`btn-block procedure`}>Click <b>here</b> to begin the procedure recording. </button>
                 {this.props.procedure.map((step, i) => 
-                  <li key={i} 
+                  <button key={i} 
                       onClick={this.procedureClick.bind(this, i)} 
                       id={'l' + i} 
-                      className={`list-group-item ${(this.props.step === i && this.state.started) ? 'active' : ''} ${(!this.state.started) ? 'list-group-item-secondary disabled' : ''}`}>
+                      disabled={!this.state.started}
+                      onMouseOver={this.changeBackground.bind(this, i)}
+                      onMouseOut={this.resetBackground.bind(this, i)}
+                      style={{borderColor: `#${this.props.colors[i]}`}}
+                      className={`btn-block procedure ${(this.props.step === i && this.state.started) ? '' : ''} ${(!this.state.started) ? 'disabled' : ''}`}>
                         {step.procedure}
-                  </li>
+                  </button>
                 )}
-                <li onClick={this.export} id='start' 
-                    className={`list-group-item ${(!this.state.started) ? 'list-group-item-secondary disabled' : ''}`}>
+                <button onClick={this.export} id='start' 
+                    className={`btn-block procedure ${(!this.state.started) ? 'list-group-item-secondary disabled' : ''}`}>
                       Click <b>here</b> to end procedure recording and download data. 
-                </li>
-              </ul>            
+                </button>
+              </div>            
             </div>
           </div>
         </div>
-        <Audio recording={this.state.started}></Audio>
       </div>
     );
   }

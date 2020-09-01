@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import Audio from "../Audio/Audio"
+import React, { Component, useRef } from "react";
+import Reminder from "../Reminder/Reminder"
 import "../../App.css";
 import "./Questions.css";
 
-import { getCurrentTime, getTimeElapsed, playSound, logData, log } from "../helpers";
+import { playSound, log } from "../helpers";
 
 
 class Questions extends Component {
@@ -25,12 +25,12 @@ class Questions extends Component {
     });
   }
 
-  handleClick = (index, event) => {
-    var question = this.props.procedure[this.props.step].questions[index][0];
-    var answer = this.props.procedure[this.props.step].questions[index][1];
+  handleClick = (index, i, event) => {
+    var question = this.props.procedure[i].questions[index][0];
+    var answer = this.props.procedure[i].questions[index][1];
 
     // Insert data to database (i.e. log data)
-    var action = `P${this.props.step + 1}Q${index + 1}: ${question}`;
+    var action = `P${i + 1}Q${index + 1}: ${question}`;
     log(action, this.props.startTime, this.props.foldername);
 
     // Play sound of answer
@@ -44,6 +44,7 @@ class Questions extends Component {
   }
 
   reminder = () => {
+    console.log("hello")
     // Remind user to vocalize their actions
     playSound("Please remember to describe what you are doing as you perform each step.");
 
@@ -58,12 +59,40 @@ class Questions extends Component {
     })
   }
 
-  render() {
+  setRef = (ref) => {
+    this.props.updateQRefs(ref);
+  }
 
+  renderQuestions = (step, i) => {
+    return (
+    <div
+      key={`${i}`}
+      className={`${(this.props.step >= 0 && this.props.procedure[i].questions.length > 0) ? 'question-box' : ''}`} 
+      style={{backgroundColor: `#${this.props.colors[i]}`}}>
+      {step.map((question, index) => 
+        <button key={`${i}${index}`}
+                ref={this.setRef} 
+                onClick={this.handleClick.bind(this, index, i)} 
+                type="button"
+                className={`btn btn-light btn-block question ${(this.props.step < 0) ? 'none' : ''}`}>Q{index + 1}: {question[0]}
+        </button>
+      )}
+      <button onClick={this.handleUnanswerable} type="button" className={`btn btn-light btn-block question ${(this.props.step < 0) ? 'none' : ''}`}>Unanswerable</button>
+    </div>
+    )
+  }
+
+  render() {
     // Wait for procedure to load
     var procedure = [];
+    var questions = [];
+
+    for (let i = 0; i < this.props.procedure.length; i++) {
+      questions.push(this.props.procedure[i].questions);
+    }
+
     if (this.props.procedure.length > 0 && this.props.step >= 0) {
-      procedure = this.props.procedure[this.props.step].questions.slice(0, 4);
+      procedure = this.props.procedure[this.props.step].questions;
     }
 
     return (
@@ -73,22 +102,14 @@ class Questions extends Component {
 
         {/* Questions */}
         <div className="list-group">
-          {procedure.map((step, i) =>
-            <button key={i} onClick={this.handleClick.bind(this, i)} type="button" className={`btn btn-light btn-block question ${(this.props.step < 0) ? 'none' : ''}`}>Q{i + 1}: {step[0]}</button>
+          {questions.map((step, i) => {
+            return this.renderQuestions(step, i); 
+            }
           )}
-          <button onClick={this.handleUnanswerable} type="button" className={`btn btn-light btn-block question ${(this.props.step < 0) ? 'none' : ''}`}>Unanswerable</button>
         </div>
         
         {/* Reminder Button */}
-        <div className="container text-center mt-5">
-          <button type="button" onClick={this.reminder} className="btn shadow ml-3 btn-dark btn-lg light-border">
-            <i className="fa fa-bell" aria-hidden="true"></i>
-            <span className="ml-2">Reminder</span>
-          </button>
-        </div>
-
-        {/* Audio Icon */}
-        <Audio recording={(this.props.step >= 0 && this.props.step < this.props.procedure.length - 1)}></Audio>
+        <Reminder startTime={this.props.startTime} foldername={this.props.foldername}></Reminder>
         
         {/* <div className="bottom-right">
           <span><b>Experimenter #: </b>{localStorage.getItem("currentEnum")}</span>

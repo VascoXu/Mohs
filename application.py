@@ -162,5 +162,29 @@ def logfile():
     
     return jsonify({'res': "Success!"})
 
+
+@app.route('/api/version', methods=['POST', 'GET'])
+def version():
+    """Retrieve the version number"""
+
+    # Get version number
+    if request.method == "GET":
+        version = 0
+        with open("version.txt", "r") as fp:
+            version = fp.readline()
+        return jsonify({'version': version})
+    
+    # Update version number
+    if request.method == "POST":
+        version = 0
+        with open("version.txt", "r") as fp:
+            version = str(int(fp.readline()) + 1)
+        
+        with open("version.txt", "w") as fp:
+            fp.write(version)
+            
+        return jsonify({'res': "Success!"})  
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
