@@ -58,7 +58,7 @@ class Procedure extends Component {
       var expnum = localStorage.getItem("currentEnum");
       var pnum = localStorage.getItem("currentPnum");
 
-      var filename = `${this.props.foldername}_${this.state.index}`;
+      var filename = `${this.props.foldername}-${this.state.index}`;
       stopAudioRecording(filename, this.props.foldername);
 
       this.setState({
@@ -100,7 +100,7 @@ class Procedure extends Component {
       var expnum = localStorage.getItem("currentEnum");
       var pnum = localStorage.getItem("currentPnum");
 
-      var filename = `${date}_${time}_${expnum}_${pnum}-${this.state.index}`;
+      var filename = `${this.props.foldername}-${this.state.index}`;
       stopAudioRecording(filename, this.props.foldername);
       
       // Log end to database
