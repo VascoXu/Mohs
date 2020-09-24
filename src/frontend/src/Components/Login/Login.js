@@ -150,7 +150,11 @@ class Login extends Component {
       <div className="login text-center">
         <div className="form-signin">
           <img className="mb-4 smash_logo" src={SmashLab} alt="Smash Lab" />
-          <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+          <h1 className="h3 font-weight-normal">Please sign in</h1>
+          {/* Version Number */}
+          <div className="mb-4">
+            <p className="h5">Session ID: {this.state.version}</p>
+          </div>
 
           {/* Experimenter Input Group */}
           <div className="input-group mb-2">

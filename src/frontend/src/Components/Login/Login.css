@@ -57,6 +57,12 @@
 
 .smash_logo
 {
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+hr
+{
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
 }
