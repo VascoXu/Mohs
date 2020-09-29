@@ -11,6 +11,8 @@ from tempfile import mkdtemp
 import json
 import csv
 import zipfile
+import webbrowser
+from threading import Timer
 
 
 # Configure application
@@ -186,5 +188,11 @@ def version():
         return jsonify({'res': "Success!"})  
 
 
+def open_browser():
+    """Open web aplication automatically"""
+    webbrowser.open_new('http://127.0.0.1:5000/')
+    
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
+      Timer(1, open_browser).start()
+      app.run(host="0.0.0.0", port=5000)
