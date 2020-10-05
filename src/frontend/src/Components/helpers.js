@@ -1,7 +1,12 @@
 // Wait for voices to load
 var voices;
+var voice;
 window.speechSynthesis.onvoiceschanged = function() {
   voices = window.speechSynthesis.getVoices();
+  // Find appropriate voice
+  for (let i = 0; i < voices.length; i++) {
+    if (voices[i]["name"] === "Google US English") voice = i;
+  }
 };
 
 export function insertToDatabase(db, table, data) {
@@ -45,7 +50,7 @@ export function playSound(sound) {
   var msg = new SpeechSynthesisUtterance(sound);
 
   if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-    msg.voice = voices[49]; // "Google US English"
+    msg.voice = voices[voice]; // "Google US English"
     msg.rate = 0.75;
     window.speechSynthesis.speak(msg);
   }

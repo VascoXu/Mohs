@@ -1,6 +1,6 @@
-P:  Pretend to clean a surface in this room. 
+P:  	Pretend to clean a surface in this room. 
 
-Q:  Which surface?
+Q:  	Which surface?
 A:	You may use any surface you would like. 
 
 Q:	Why do I need to clean a surface?
@@ -8,9 +8,9 @@ A:	You will use the clean surface when you change your dressing. It is important
 
 ----------------------------------------
 
-P:  Wash your hands with soap and water.
+P:  	Wash your hands with soap and water.
 
-Q:  Is Purell/hand sanitizer okay?
+Q:  	Is Purell/hand sanitizer okay?
 A:	Hand sanitizer is okay to use.
 
 Q:	How long should I wash my hands for?
@@ -58,25 +58,25 @@ A:	Wash your wound gently with soap and water.
 Q:	What do I wash my wound with? 
 A:	Please use your clean hands to wash your wound with soap and water. 
 
-Q:  How long should I wash my wound for?
+Q:  	How long should I wash my wound for?
 A:	Wash your wound for thirty seconds.
 
-Q:  Where do I put the bandage?
+Q:  	Where do I put the bandage?
 A:	Place the bandage in the trash bag.
 
 ----------------------------------------
 
-P:  Pretend to dry your wound and body with the paper towel. 
+P:  	Pretend to dry your wound and body with the paper towel. 
 
 Q:	What do I dry the wound with?
 A:	Dry your wound with a clean paper towel. 
 
-Q:  Do I dry my body first or the wound first?
+Q:  	Do I dry my body first or the wound first?
 A:	Dry your wound first and then your body.
 
 ----------------------------------------
 
-P:  Pretend to pat your wound dry with gauze.
+P:  	Pretend to pat your wound dry with gauze.
 
 Q:	Can I use a paper towel to dry my wound?
 A:	You may use a paper towel to dry your wound if the paper towel is clean.
@@ -86,7 +86,7 @@ A:	Please remove visible drops of water.
 
 ----------------------------------------
 
-P:  Cut the non-stick dressing then open the Vaseline. 
+P:  	Cut the non-stick dressing then open the Vaseline. 
 
 Q:	How should I cut the dressing?/What size do I cut the dressing?
 A:	Cut the dressing to a size that will cover the wound.
