@@ -173,10 +173,13 @@ class Procedure extends Component {
     // Change background of first element
     document.getElementById('l0').style.background = `#${this.props.colors[0]}`;
     this.prevClicked = document.getElementById('l0');
-    
-    // Play initial beep sound
-    playBeep();
 
+    // Wait 1.5 seconds before beep
+    setTimeout( () => {
+      // Play initial beep sound
+      playBeep();
+    }, 1500);
+  
     // Wait 2 seconds before playing procedure audio 
     setTimeout( () => {
       // Insert data to database (i.e log data)

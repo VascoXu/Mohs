@@ -44,7 +44,6 @@ class Questions extends Component {
   }
 
   reminder = () => {
-    console.log("hello")
     // Remind user to vocalize their actions
     playSound("Please remember to describe what you are doing as you perform each step.");
 
@@ -67,7 +66,7 @@ class Questions extends Component {
     return (
     <div
       key={`${i}`}
-      className={`${(this.props.step >= 0 && this.props.procedure[i].questions.length > 0) ? 'question-box' : ''}`} 
+      className={`${(this.props.step >= 0) ? 'question-box' : ''}`} 
       style={{backgroundColor: `#${this.props.colors[i]}`}}>
       {step.map((question, index) => 
         <button key={`${i}${index}`}
@@ -101,7 +100,7 @@ class Questions extends Component {
         <hr/>
 
         {/* Questions */}
-        <div className="list-group">
+        <div className="list-group mb-4">
           {questions.map((step, i) => {
             return this.renderQuestions(step, i); 
             }

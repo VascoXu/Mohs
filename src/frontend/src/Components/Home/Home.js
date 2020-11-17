@@ -12,7 +12,8 @@ class Home extends Component {
       startTime: 0,
       step: -1
     }
-    this.colors = ["F47C7C", "F7F48B", "A1DE93", "8DA290", "70A1D7", "B399D4", "E1B894", "58949C", "B3A580", "E18AAA"];
+    this.colors = ["F47C7C", "F7F48B", "A1DE93", "F2AFA3", "70A1D7", "B399D4", 
+                  "E1B894", "58949C", "FEC8D8", "B3A580", "E18AAA", "8DA290", "DAF0EE"];
   }
 
   getProcedure = () => {
