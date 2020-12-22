@@ -13,6 +13,7 @@ class Login extends Component {
       enum: "",
       etime: "",
       filename: "",
+      session_id: "",
       eready: false,
       econsent: false,
       econsented: false,
@@ -22,12 +23,12 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    // Get current version number
-    fetch('/api/version')
+    // Get current session_id number
+    fetch('/api/session_id')
     .then(response => response.json())
     .then(data => {
       this.setState({
-        version: data["version"]
+        session_id: data["session_id"]
       });
     })
   }
@@ -93,7 +94,7 @@ class Login extends Component {
     // Deteremine filename
     var date = getTodaysDate();
     var time = getCurrentTime().replace(/:/g, '');
-    var foldername = `${time}_${this.state.enum}_${this.state.pnum}_${this.state.version}`;
+    var foldername = `${time}_${this.state.enum}_${this.state.pnum}_${this.state.session_id}`;
 
     history.push('/Home', {pnum: this.state.pnum, foldername: foldername});
 
@@ -117,8 +118,8 @@ class Login extends Component {
       console.log(result);
     });
 
-    // Update version number
-    fetch('/api/version', {
+    // Update session_id number
+    fetch('/api/session_id', {
       method: 'POST',
     })
     .then(response => response.json())
@@ -151,9 +152,9 @@ class Login extends Component {
         <div className="form-signin">
           <img className="mb-4 smash_logo" src={SmashLab} alt="Smash Lab" />
           <h1 className="h3 font-weight-normal">Please sign in</h1>
-          {/* Version Number */}
+          {/* Session_ID Number */}
           <div className="mb-4">
-            <p className="h5">Session ID: {this.state.version}</p>
+            <p className="h5">Session ID: {this.state.session_id}</p>
           </div>
 
           {/* Experimenter Input Group */}

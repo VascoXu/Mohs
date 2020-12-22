@@ -22,7 +22,7 @@ class Home extends Component {
     .then(response => response.json())
     .then(data => {
       this.setState({
-        procedure: data
+        procedure: data['procedure']
       });
     })
   }

@@ -4,6 +4,7 @@ import shutil
 
 from flask import Flask, flash, jsonify, request, redirect, session, render_template, url_for, send_file
 from helpers import zipdir
+from shutil import copyfile
 from base64 import b64decode
 from werkzeug.utils import secure_filename
 from flask_session import Session
@@ -51,10 +52,12 @@ def procedure():
     """Return the procedure and list of questions"""
 
     procedure = []
-    with open('procedure.txt') as fp:
+    procedure_file = glob.glob("procedure*.txt")[0]
+
+    with open(procedure_file) as fp:
         # Remove empty lines
         lines = (line.rstrip() for line in fp)
-        lines = (line for line in lines if line)
+        lines = (line for line in lines if line)            
 
         for line in lines:
             # Insert procedure
@@ -81,7 +84,7 @@ def procedure():
 
             procedure.append(step)    
 
-    return jsonify(procedure)
+    return jsonify({'procedure': procedure})
 
 
 @app.route('/api/pnum', methods=['POST'])
@@ -106,6 +109,18 @@ def pnum():
     # Create log file with headers
     with open(f'Participants/{foldername}/logfiles/{foldername}.csv', 'w') as logfile:
         csv_writer = csv.writer(logfile)
+
+        # Determine procedure version
+        procedure_file = glob.glob("procedure*.txt")[0]
+        procedure_version = procedure_file.split('_')
+        if len(procedure_version) == 1:
+            # First method
+            copyfile("procedure.txt", f"Participants/{foldername}/logfiles/procedure.txt")
+        else:
+            # Second method
+            procedure_version = procedure_version[1].replace(".txt", "")
+            csv_writer.writerow(['Procedure_Version', procedure_version])
+
         csv_writer.writerow(['Absolute Time', 'Relative Time', 'Action'])
         csv_writer.writerow([etime, 'N/A', 'Experimenter Ready'])
         csv_writer.writerow([ptime, 'N/A', 'Participant Ready'])
@@ -165,24 +180,24 @@ def logfile():
     return jsonify({'res': "Success!"})
 
 
-@app.route('/api/version', methods=['POST', 'GET'])
+@app.route('/api/session_id', methods=['POST', 'GET'])
 def version():
-    """Retrieve the version number"""
+    """Retrieve the session_id number"""
 
     # Get version number
     if request.method == "GET":
         version = 0
-        with open("version.txt", "r") as fp:
-            version = fp.readline()
-        return jsonify({'version': version})
+        with open("session_id.txt", "r") as fp:
+            session_id = fp.readline()
+        return jsonify({'session_id': session_id})
     
     # Update version number
     if request.method == "POST":
         version = 0
-        with open("version.txt", "r") as fp:
+        with open("session_id.txt", "r") as fp:
             version = str(int(fp.readline()) + 1)
         
-        with open("version.txt", "w") as fp:
+        with open("session_id.txt", "w") as fp:
             fp.write(version)
             
         return jsonify({'res': "Success!"})  
