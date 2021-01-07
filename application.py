@@ -180,6 +180,23 @@ def logfile():
     return jsonify({'res': "Success!"})
 
 
+@app.route('/api/reminders', methods=['POST', 'GET'])
+def reminders():
+    """Return a set of reminders"""
+
+    reminders_file = "reminders.txt"
+    reminders = []
+    with open(reminders_file) as fp:
+        # Remove empty lines
+        lines = (line.rstrip() for line in fp)
+        lines = (line for line in lines if line)
+
+        for line in lines:
+            reminders.append(line)
+    
+    return jsonify({'reminders': reminders})
+
+
 @app.route('/api/session_id', methods=['POST', 'GET'])
 def version():
     """Retrieve the session_id number"""

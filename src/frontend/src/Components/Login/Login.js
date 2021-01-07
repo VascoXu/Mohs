@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SmashLab from './SmashLab.png'
 import './Login.css';
 import history from '../../history';
+import Reminders from '../Reminders/Reminders';
 import { getCurrentTime, getTodaysDate } from "../helpers";
 
 class Login extends Component {
@@ -18,8 +19,10 @@ class Login extends Component {
       econsent: false,
       econsented: false,
       pconsent: false,
+      reminders: false,
       edit: false
     };
+    this.foldername = "";
   }
 
   componentDidMount() {
@@ -84,6 +87,17 @@ class Login extends Component {
     });
   }
 
+  toggleReminders = () => {
+    // Reminders popup 
+    this.setState({
+      reminders: !this.state.reminders
+    });
+  }
+
+  remindersDone = () => {
+    history.push('/Home', {pnum: this.state.pnum, foldername: this.foldername});
+  }
+
   participantReady = () => {
     // Store current Participant Number in LocalStorage
     localStorage.setItem("currentPnum", this.state.pnum);
@@ -92,17 +106,14 @@ class Login extends Component {
     localStorage.setItem("currentEnum", this.state.enum);
 
     // Deteremine filename
-    var date = getTodaysDate();
     var time = getCurrentTime().replace(/:/g, '');
-    var foldername = `${time}_${this.state.enum}_${this.state.pnum}_${this.state.session_id}`;
-
-    history.push('/Home', {pnum: this.state.pnum, foldername: foldername});
+    this.foldername = `${time}_${this.state.enum}_${this.state.pnum}_${this.state.session_id}`;
 
     // Inform the server about the Participant Number
     fetch('/api/pnum', {
       method: 'POST',
       body: JSON.stringify({
-        foldername: foldername,
+        foldername: this.foldername,
         pnum: this.state.pnum,
         etime: this.state.etime,
         ptime: getCurrentTime()
@@ -127,6 +138,9 @@ class Login extends Component {
       // Print result
       console.log(result);
     });
+
+    // Toggle reminders popup
+    this.toggleReminders();
   }
 
   render() {
@@ -179,6 +193,9 @@ class Login extends Component {
 
           {expButton}
           {partButton}
+
+          {this.state.reminders ? <Reminders toggle={this.toggleReminders} done={this.remindersDone}/> : null}
+
         </div>
       </div>
      );
